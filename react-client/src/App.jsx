@@ -1,17 +1,15 @@
 import React, { Fragment } from 'react';
 import { Container } from 'semantic-ui-react';
 
-import Menu from './Menu';
-import Login from './Login';
-import Landing from './CreateLobby';
+import Menu from './Headers/Menu';
+import Routes from './Routes';
+import CreateLobby from './Landing/CreateLobby';
 
-const App = () => (
+export default () => (
   <Fragment>
     <Menu />
     <Container>
-      <Landing />
+      <Routes/>
     </Container>
   </Fragment>
 );
-
-export default App;
