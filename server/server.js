@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 
 const dataLayer = require('./data.js')
+const tft = require('./tft.js')
 
 app.use(bodyParser.json());
 
