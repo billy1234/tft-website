@@ -13,7 +13,7 @@ app.use(express.static(`${__dirname}/../react-client/dist`));
 
 app.get('/', function (req, res) {
     res.sendFile(path.resolve(`${__dirname}/../react-client/dist/index.html`));
-})
+});
 
 
 app.get('/createLobby', function (req, res) {
@@ -27,10 +27,9 @@ app.get('/createLobby', function (req, res) {
             console.log(err);
             res.sendStatus(400);
         })
-})
+});
 
 app.get('/lobby/:id', function (req, res) {
-    console.log('hit lobby')
     if (!req.params.id) res.sendStatus(404)
 
     dataLayer.lobbyExists(req.params.id)
@@ -41,10 +40,24 @@ app.get('/lobby/:id', function (req, res) {
             console.log(err);
             res.sendStatus(400);
         })
-})
+});
+
+app.get('/champByCost', function (req, res) {
+    console.log("hit champ by cost")
+    const players = req.query.players;
+    const seed = req.query.seed;
+    if(!seed || !players) {
+        console.log(req.query)
+        res.sendStatus(400);
+        return;
+    }
+    res.json({data:tft.getByCost(players,seed)})
+    console.log('data sent');
+
+
+});
 
 app.get('/lobby/:id/data', function (req, res) {
-    console.log('hit lobby data')
     if (!req.params.id || !dataLayer.lobbyExists(req.params.id)) {
         res.sendStatus(404);
         return;

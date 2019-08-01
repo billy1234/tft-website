@@ -3,6 +3,7 @@ class lobby{
         this.hostIp = hostIp
         this.players = players
         this.roundNo = 0;
+        this.mode = 'champByCost';
         this.clientJson = function(seed){
             return{
                 players:this.players,

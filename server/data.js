@@ -24,7 +24,6 @@ const makeid = function(depth = 0) {
 const createLobby = async function(players,hostId){
     id = makeid();
     lobbies[id] = new lobby(players,hostId);
-    console.log(id);
     return id;
 }
 

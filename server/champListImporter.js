@@ -3,7 +3,7 @@ var path = require('path');
 
 const raw = fs.readFileSync(path.join(__dirname,'championList'), "utf8");
 
-const rex = /(?:[\D]*\n){6,}cost\d+/gm;
+const rex = /(?:[\D]+\n){6,}cost\d+\n/gm;
 
 const data = raw.match(rex);
 
@@ -11,14 +11,13 @@ const getHerosSingle = () => {
     return data.reduce(function(map, obj) {
         const result = {};
         const arr = obj.split('\n');
-
+        if(arr[arr.length -1] == '') arr.pop(); //if we matched a new line at the end
         name = arr[0]; //first elem
-        result['cost'] = arr[arr.length -1]; //last elem
+        result['cost'] = arr[arr.length -1].match(/\d+/)[0];//digits in last elem
         const types = [];
         for(i = 0; 3 + (i*2) < arr.length -1; i++){
             types.push(arr[3 + (i*2)]);
         }
-        console.log(types)
         if(types.length == 2){
             result['origin'] = [types[0]];
             result['class'] = [types[1]];
@@ -29,24 +28,24 @@ const getHerosSingle = () => {
         }
 
         map[name] = result;
-
         return map;
     },{});
 }
 
-const getCompleteHeros  = (list, classMap, originMap) => {
-     list.keys().forEach((k) =>{
-        elem = list[k];
+const getCompleteHeros  = (dict, classMap, originMap) => {
+     for(k in dict){
+        elem = dict[k];
         if(elem.additional) {
-            for(e in elem.additional) {
-                if (classMap.keys().includes(e)) elem.class.push(e);
-                else if (originMap.keys().includes(e)) elem.origin.push(e);
+            for(let i =0; i < elem.additional.length; i++) {
+                const e = elem.additional[i];
+                if (e in classMap) elem.class.push(e);
+                else if (e in originMap) elem.origin.push(e);
 
             }
             delete elem.additional;
         }
-    });
-    return list;
+    }
+    return dict;
 }
 
 const getMap = (primaryKey, championMap) => {
